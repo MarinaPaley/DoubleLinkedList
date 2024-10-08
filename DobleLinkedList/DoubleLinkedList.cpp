@@ -3,11 +3,12 @@
 
 namespace list
 {
-	DoubleLinkedList::DoubleLinkedList() : head{ nullptr }, tail{ nullptr }
+	DoubleLinkedList::DoubleLinkedList() : head{ nullptr }, tail{ nullptr }, size{0}
 	{
 	}
 
 	DoubleLinkedList::DoubleLinkedList(std::initializer_list<int> list)
+		: DoubleLinkedList()
 	{
 		for (auto item = list.begin(); item != list.end(); ++item)
 		{
@@ -26,6 +27,17 @@ namespace list
 		}
 	}
 
+	DoubleLinkedList::DoubleLinkedList(const DoubleLinkedList& other)
+		: DoubleLinkedList()
+	{
+		auto current = other.tail;
+		while (current != nullptr)
+		{
+			this->PushFront(current->data);
+			current = current->previous;
+		}
+	}
+
 	void DoubleLinkedList::PushBack(const int value)
 	{
 		auto node = new Node{ value };
@@ -40,6 +52,7 @@ namespace list
 			node->previous = this->tail;
 			this->tail = node;
 		}
+		++this->size;
 	}
 
 	int DoubleLinkedList::GetBack() const
@@ -60,6 +73,46 @@ namespace list
 			this->tail = this->tail->previous;
 			this->tail->next = nullptr;
 			delete temp;
+			--this->size;
+		}
+	}
+
+	void DoubleLinkedList::PushFront(const int value)
+	{
+		auto node = new Node{ value };
+		if (this->IsEmpty())
+		{
+			this->head = node;
+			this->tail = node;
+		}
+		else 
+		{
+			this->head->previous = node;
+			node->next = this->head;
+			this->head = node;
+		}
+		++this->size;
+	}
+
+	int DoubleLinkedList::GetFront() const
+	{
+		if (this->IsEmpty())
+		{
+			throw std::out_of_range("Список пуст!");
+		}
+
+		return this->head->data;
+	}
+
+	void DoubleLinkedList::RemoveFront()
+	{
+		if (!this->IsEmpty())
+		{
+			auto temp = this->head;
+			this->head = this->head->previous;
+			this->head->next = nullptr;
+			delete temp;
+			--this->size;
 		}
 	}
 
@@ -76,6 +129,27 @@ namespace list
 		{
 			buffer << current->data << " ";
 			current = current->next;
+		}
+
+		return buffer.str();
+	}
+	std::size_t DoubleLinkedList::GetSize() const
+	{
+		return this->size;
+	}
+
+	bool operator==(const DoubleLinkedList& lha, const DoubleLinkedList& rha)
+	{
+		return lha.ToString() == rha.ToString();
+	}
+
+	std::wstring ToString(const DoubleLinkedList& list)
+	{
+		std::wstringstream buffer{};
+		const auto temp = list.ToString();
+		for (auto it = temp.cbegin(); it != temp.cend(); ++it)
+		{
+			buffer << *it;
 		}
 
 		return buffer.str();
