@@ -14,14 +14,15 @@ namespace list
 		Node* head;
 		Node* tail;
 		std::size_t size;
+		void Swap(DoubleLinkedList other) noexcept;
 	public:
 		DoubleLinkedList();
 		DoubleLinkedList(std::initializer_list<int> list);
 		~DoubleLinkedList();
 		DoubleLinkedList(const DoubleLinkedList& other);
-		DoubleLinkedList(DoubleLinkedList&& other) noexcept = delete;
-		DoubleLinkedList& operator=(const DoubleLinkedList& other) = delete;
-		DoubleLinkedList& operator=(DoubleLinkedList&& other) noexcept = delete;
+		DoubleLinkedList(DoubleLinkedList&& other) noexcept;
+		DoubleLinkedList& operator=(const DoubleLinkedList& other);
+		DoubleLinkedList& operator=(DoubleLinkedList&& other) noexcept;
 		void PushBack(const int value);
 		int GetBack() const;
 		void RemoveBack();
@@ -31,5 +32,6 @@ namespace list
 		bool IsEmpty() const;
 		std::string ToString() const;
 		std::size_t GetSize() const;
+		bool Find(const int value);
 	};
 }

@@ -3,7 +3,14 @@
 
 namespace list
 {
-	DoubleLinkedList::DoubleLinkedList() : head{ nullptr }, tail{ nullptr }, size{0}
+	void DoubleLinkedList::Swap(DoubleLinkedList other) noexcept
+	{
+		std::swap(this->head, other.head);
+		std::swap(this->tail, other.tail);
+		std::swap(this->size, other.size);
+	}
+
+	DoubleLinkedList::DoubleLinkedList() : head{ nullptr }, tail{ nullptr }, size{ 0 }
 	{
 	}
 
@@ -36,6 +43,33 @@ namespace list
 			this->PushFront(current->data);
 			current = current->previous;
 		}
+	}
+
+	DoubleLinkedList::DoubleLinkedList(DoubleLinkedList&& other) noexcept
+		: DoubleLinkedList()
+	{
+		*this = std::move(other); 
+	}
+
+	DoubleLinkedList& DoubleLinkedList::operator=(const DoubleLinkedList& other)
+	{
+		if (this != &other)
+		{
+			DoubleLinkedList temp(other);
+			this->Swap(temp);
+		}
+
+		return *this;
+	}
+
+	DoubleLinkedList& DoubleLinkedList::operator=(DoubleLinkedList&& other) noexcept
+	{
+		if (this != &other)
+		{
+			this->Swap(other);
+		}
+
+		return *this;
 	}
 
 	void DoubleLinkedList::PushBack(const int value)
@@ -136,6 +170,17 @@ namespace list
 	std::size_t DoubleLinkedList::GetSize() const
 	{
 		return this->size;
+	}
+
+	bool DoubleLinkedList::Find(const int value)
+	{
+		auto current = this->head;
+		while (current != nullptr && current->data != value)
+		{
+			current = current->next;
+		}
+
+		return current != nullptr;
 	}
 
 	bool operator==(const DoubleLinkedList& lha, const DoubleLinkedList& rha)
