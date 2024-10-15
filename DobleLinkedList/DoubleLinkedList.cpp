@@ -190,13 +190,9 @@ namespace list
 
 	std::wstring ToString(const DoubleLinkedList& list)
 	{
-		std::wstringstream buffer{};
 		const auto temp = list.ToString();
-		for (auto it = temp.cbegin(); it != temp.cend(); ++it)
-		{
-			buffer << *it;
-		}
+		std::wstring buffer{ temp.cbegin(), temp.cend() };
 
-		return buffer.str();
+		return buffer;
 	}
 }
